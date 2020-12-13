@@ -42,7 +42,7 @@ def process_get_request():
 def delete_token_and_values():
     token = request.args.get('token', None)
     if (token != None):
-        return (database_ops.get_data(token), 200)
+        return (database_ops.delete_on_token(token), 200)
 
 
 
