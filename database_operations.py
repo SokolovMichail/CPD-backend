@@ -28,7 +28,7 @@ class DatabaseOps:
             self.settings = json.load(json_data_file)
 
     def connect(self):
-        if (self.use_config)
+        if (self.use_config):
             database = self.settings["postgresql"]["database"]
             host = self.settings["postgresql"]["host"]
             user = self.settings["postgresql"]["user"]
