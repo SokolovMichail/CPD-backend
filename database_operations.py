@@ -1,5 +1,7 @@
 import json
 import psycopg2
+import urllib.parse as urlparse
+import os
 
 INSERT_QUERY_GRAPH = """INSERT INTO graphstorage (token, graph) 
 VALUES (%s, %s) 
@@ -19,25 +21,43 @@ DELETE_QUERY_GRAPH = '''delete from graphstorage where token = %s;'''
 DELETE_QUERY_METRICS = '''delete from metricsstorage where token = %s;'''
 
 class DatabaseOps:
-    def __init__(self,config_file = "config.json"):
+    def __init__(self,use_config=False,config_file = "config.json"):
         self.settings = None
+        self.use_config = use_config
         with open(config_file) as json_data_file:
             self.settings = json.load(json_data_file)
 
     def connect(self):
-        database = self.settings["postgresql"]["database"]
-        host = self.settings["postgresql"]["host"]
-        user = self.settings["postgresql"]["user"]
-        password = self.settings["postgresql"]["password"]
-        port = self.settings["postgresql"]["port"]
-        conn = psycopg2.connect(
-            host=host,
-            database=database,
-            user=user,
-            password=password,
-            port=port
-        )
-        return conn
+        if (self.use_config)
+            database = self.settings["postgresql"]["database"]
+            host = self.settings["postgresql"]["host"]
+            user = self.settings["postgresql"]["user"]
+            password = self.settings["postgresql"]["password"]
+            port = self.settings["postgresql"]["port"]
+            conn = psycopg2.connect(
+                host=host,
+                database=database,
+                user=user,
+                password=password,
+                port=port
+            )
+            return conn
+        else:
+            url = urlparse.urlparse(os.environ['DATABASE_URL'])
+            dbname = url.path[1:]
+            user = url.username
+            password = url.password
+            host = url.hostname
+            port = url.port
+
+            conn = psycopg2.connect(
+                dbname=dbname,
+                user=user,
+                password=password,
+                host=host,
+                port=port
+            )
+            return conn
 
     def data_to_json(self,model,metrics):
         res = []
