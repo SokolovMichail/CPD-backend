@@ -36,7 +36,7 @@ def process_get_request():
     if(token != None):
         return (database_ops.get_data(token),200)
     else:
-        return (uuid.uuid4(),200)
+        return (str(uuid.uuid4()),200)
 
 
 
