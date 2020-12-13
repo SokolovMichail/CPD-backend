@@ -8,12 +8,15 @@ ON CONFLICT (token) DO UPDATE
       graph = excluded.graph;commit;"""
 
 INSERT_QUERY_METRICS = """INSERT INTO metricsstorage (token,epoch,loss,accuracy) 
-VALUES (%s, %s,%s,%s) RETURNING token;commit; 
-"""
+VALUES (%s, %s,%s,%s) RETURNING token;commit; """
 
 SELECT_QUERY_GRAPH = '''select graph from graphstorage where token = %s;'''
 
 SELECT_METRICS_GRAPH = '''select epoch,loss,accuracy from metricsstorage where token = %s order by epoch asc ;'''
+
+DELETE_QUERY_GRAPH = '''delete from graphstorage where token = %s;'''
+
+DELETE_QUERY_METRICS = '''delete from metricsstorage where token = %s;'''
 
 class DatabaseOps:
     def __init__(self,config_file = "config.json"):
@@ -92,4 +95,24 @@ class DatabaseOps:
             if (conn != None):
                 conn.close()
             return result
+
+    def delete_on_token(self,token):
+        conn = None
+        result = False
+        try:
+            conn = self.connect()
+            curr = conn.cursor()
+            curr.execute(DELETE_QUERY_METRICS, (token,))
+            conn.commit()
+            curr.execute(DELETE_QUERY_GRAPH, (token,))
+            conn.commit()
+            result = True
+        except (psycopg2.DatabaseError) as error:
+            print(error)
+        finally:
+            if (conn != None):
+                conn.close()
+            return result
+
+
 

@@ -38,6 +38,12 @@ def process_get_request():
     else:
         return (str(uuid.uuid4()),200)
 
+@app.route('/',methods=['DELETE'])
+def delete_token_and_values():
+    token = request.args.get('token', None)
+    if (token != None):
+        return (database_ops.get_data(token), 200)
+
 
 
 
