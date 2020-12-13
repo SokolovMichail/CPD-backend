@@ -1,9 +1,13 @@
 from flask import Flask
 from flask import request
-app = Flask(__name__)
-import requests
-from database_operations import DatabaseOps
+from flask_sqlalchemy import SQLAlchemy
+import os
 import uuid
+import config
+
+app = Flask(__name__)
+app.config.from_object(config.DevelopmentConfig)
+db = SQLAlchemy(app)
 
 database_ops = DatabaseOps()
 
