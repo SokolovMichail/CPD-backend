@@ -2,7 +2,7 @@ import os
 import urllib
 from graphviz import Source
 import re
-
+"New"
 SVG_CATALOGUE_PATH = 'pics'
 
 class SVG_Generator:
