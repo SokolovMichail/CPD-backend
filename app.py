@@ -6,7 +6,7 @@ from database_operations import DatabaseOps
 from svg_generator import SVG_Generator
 import uuid
 
-database_ops = DatabaseOps(use_config=True)
+database_ops = DatabaseOps()
 
 @app.route('/',methods=['POST'])
 def process_post_request():
