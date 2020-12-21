@@ -65,7 +65,7 @@ class DatabaseOps:
             res.append({"epoch":metric[0],"loss":metric[1], "accuracy":metric[2]})
         return json.dumps({"model":model,"metrics":res})
 
-    def get_data(self,token):
+    def get_data(self,token,svg_gen):
         conn = None
         result = ''''''
         try:
@@ -76,7 +76,7 @@ class DatabaseOps:
             graph = (curr.fetchone())
             curr.execute(SELECT_METRICS_GRAPH, (token,))
             metrics = curr.fetchall()
-            result = self.data_to_json(graph,metrics)
+            result = self.data_to_json(svg_gen(graph),metrics)
         except (psycopg2.DatabaseError) as error:
             print(error)
         finally:
