@@ -69,7 +69,7 @@ class DatabaseOps:
             res.append({"epoch":metric[0],"loss":metric[1], "accuracy":metric[2]})
         return json.dumps({"model":model,"metrics":res})
 
-    def get_data(self,token,svg_gen):
+    def get_data(self,token):
         conn = None
         result = ''''''
         try:
