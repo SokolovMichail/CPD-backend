@@ -2,6 +2,7 @@ import json
 import psycopg2
 import urllib.parse as urlparse
 import os
+from svg_generator import SVG_Generator
 
 INSERT_QUERY_GRAPH = """INSERT INTO graphstorage (token, graph) 
 VALUES (%s, %s) 
@@ -20,8 +21,11 @@ DELETE_QUERY_GRAPH = '''delete from graphstorage where token = %s;'''
 
 DELETE_QUERY_METRICS = '''delete from metricsstorage where token = %s;'''
 
+
+
 class DatabaseOps:
     def __init__(self,use_config=False,config_file = "config.json"):
+        self.svg_generator = SVG_Generator()
         self.settings = None
         self.use_config = use_config
         with open(config_file) as json_data_file:
@@ -76,7 +80,8 @@ class DatabaseOps:
             graph = (curr.fetchone())
             curr.execute(SELECT_METRICS_GRAPH, (token,))
             metrics = curr.fetchall()
-            result = self.data_to_json(svg_gen.generate_svg(graph),metrics)
+            result = self.data_to_json(self.svg_generator.generate_svg(token,graph[0]),metrics)
+            print("OK")
         except (psycopg2.DatabaseError) as error:
             print(error)
         finally:
