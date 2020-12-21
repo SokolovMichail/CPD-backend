@@ -76,7 +76,7 @@ class DatabaseOps:
             graph = (curr.fetchone())
             curr.execute(SELECT_METRICS_GRAPH, (token,))
             metrics = curr.fetchall()
-            result = self.data_to_json(svg_gen(graph),metrics)
+            result = self.data_to_json(svg_gen.generate_svg(graph),metrics)
         except (psycopg2.DatabaseError) as error:
             print(error)
         finally:
