@@ -3,6 +3,8 @@ import psycopg2
 import urllib.parse as urlparse
 import os
 from svg_generator import SVG_Generator
+import random
+import string
 
 INSERT_QUERY_GRAPH = """INSERT INTO graphstorage (token, graph) 
 VALUES (%s, %s) 
@@ -138,6 +140,31 @@ class DatabaseOps:
             if (conn != None):
                 conn.close()
             return result
+
+    #Token is guaranteed to be unique at a given moment.
+    def generate_token(self,amount_of_characters=5):
+        conn = None
+        token = '00000'
+        try:
+            conn = self.connect()
+            curr = conn.cursor()
+            while True:
+                token = ''.join(
+                    random.choice(string.ascii_uppercase + string.digits) for _ in range(amount_of_characters))
+                curr.execute(SELECT_QUERY_GRAPH, (token,))
+                # conn.commit()
+                list = curr.fetchall()
+                if len(list) == 0:
+                    break
+            print("OK")
+        except (psycopg2.DatabaseError) as error:
+            print(error)
+        finally:
+            if (conn != None):
+                conn.close()
+            return token.upper()
+
+
 
 
 

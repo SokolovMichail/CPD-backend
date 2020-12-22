@@ -1,16 +1,15 @@
 from flask import Flask
 from flask import request
 app = Flask(__name__)
-import requests
 from database_operations import DatabaseOps
-from svg_generator import SVG_Generator
-import uuid
 
 database_ops = DatabaseOps()
 
 @app.route('/',methods=['POST'])
 def process_post_request():
-    token = request.args.get('token')
+    token = request.args.get('token',None)
+    if (token != None):
+        token = token.lower()
     #print(token)
     req_data = request.json
     model = req_data.get('model',None)
@@ -35,17 +34,17 @@ def process_post_request():
 def process_get_request():
     token = request.args.get('token',None)
     if(token != None):
+        token = token.lower()
         return (database_ops.get_data(token),200)
     else:
-        return (str(uuid.uuid4()),200)
+        return database_ops.generate_token()
 
 @app.route('/',methods=['DELETE'])
 def delete_token_and_values():
     token = request.args.get('token', None)
     if (token != None):
+        token = token.lower()
         return (database_ops.delete_on_token(token), 200)
-
-
 
 
 if __name__ == '__main__':
