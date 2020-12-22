@@ -8,7 +8,7 @@ database_ops = DatabaseOps()
 @app.route('/',methods=['POST'])
 def process_post_request():
     token = request.args.get('token',None)
-    if(token != None or token != 'null'):
+    if(token != None and token != 'null'):
         token = token.lower()
     #print(token)
     req_data = request.json
@@ -33,7 +33,7 @@ def process_post_request():
 @app.route('/',methods=['GET'])
 def process_get_request():
     token = request.args.get('token',None)
-    if(token != None or token != 'null'):
+    if(token != None and token != 'null'):
         token = token.lower()
         return (database_ops.get_data(token),200)
     else:
@@ -42,7 +42,7 @@ def process_get_request():
 @app.route('/',methods=['DELETE'])
 def delete_token_and_values():
     token = request.args.get('token', None)
-    if(token != None or token != 'null'):
+    if(token != None and token != 'null'):
         token = token.lower()
         res = database_ops.delete_on_token(token)
         if (res):
