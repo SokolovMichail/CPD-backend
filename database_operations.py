@@ -156,7 +156,6 @@ class DatabaseOps:
                 list = curr.fetchall()
                 if len(list) == 0:
                     break
-            print("OK")
         except (psycopg2.DatabaseError) as error:
             print(error)
         finally:
