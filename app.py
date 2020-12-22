@@ -44,7 +44,11 @@ def delete_token_and_values():
     token = request.args.get('token', None)
     if (token != None):
         token = token.lower()
-        return (database_ops.delete_on_token(token), 200)
+        res = database_ops.delete_on_token(token)
+        if (res):
+            return ('', 200)
+        else:
+            return ('',500)
 
 
 if __name__ == '__main__':
