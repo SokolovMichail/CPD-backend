@@ -3,7 +3,7 @@ from flask import request
 app = Flask(__name__)
 from database_operations import DatabaseOps
 
-database_ops = DatabaseOps()
+database_ops = DatabaseOps(use_config=True)
 
 @app.route('/',methods=['POST'])
 def process_post_request():
@@ -33,7 +33,7 @@ def process_post_request():
 @app.route('/',methods=['GET'])
 def process_get_request():
     token = request.args.get('token',None)
-    if(token != None and token != 'null'):
+    if(token != None):
         token = token.lower()
         return (database_ops.get_data(token),200)
     else:
