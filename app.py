@@ -3,7 +3,7 @@ from flask import request
 app = Flask(__name__)
 from database_operations import DatabaseOps
 
-database_ops = DatabaseOps(use_config=True)
+database_ops = DatabaseOps()
 
 @app.route('/',methods=['POST'])
 def process_post_request():
